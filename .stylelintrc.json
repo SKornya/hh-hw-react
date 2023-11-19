@@ -1,4 +1,5 @@
 {
   "extends": ["@hh.ru/stylelint-config-hh", "stylelint-config-prettier"],
-  "plugins": ["stylelint-prettier"]
+  "plugins": ["stylelint-prettier", "stylelint-less"],
+  "customSyntax": "postcss-less"
 }

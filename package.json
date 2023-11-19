@@ -30,10 +30,13 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "husky": "^8.0.0",
+    "less": "^4.2.0",
     "lint-staged": "^15.1.0",
+    "postcss-less": "^6.0.0",
     "prettier": "2.8.7",
     "stylelint": "^15.11.0",
     "stylelint-config-prettier": "^9.0.5",
+    "stylelint-less": "^2.0.0",
     "stylelint-order": "^6.0.3",
     "stylelint-prettier": "^4.0.2",
     "stylelint-scss": "^5.3.1",
@@ -43,6 +46,6 @@
   "lint-staged": {
     "*.{ts,tsx,css}": "yarn format",
     "*.{ts,tsx}": "yarn lint",
-    "*.{css}": "yarn style-lint"
+    "*.{css,less}": "yarn style-lint"
   }
 }
