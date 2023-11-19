@@ -1,0 +1,15 @@
+{
+  "prettier/prettier": [
+    "error",
+    {
+      "semi": true,
+      "trailingComma": "all",
+      "singleQuote": true,
+      "bracketSpacing": true,
+      "bracketSameLine": false,
+      "tabWidth": 2,
+      "arrowParens": "always",
+      "endOfLine": "auto"
+    }
+  ]
+}
