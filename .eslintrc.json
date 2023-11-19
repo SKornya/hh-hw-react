@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "env": { "browser": true, "es2020": true },
+  "extends": ["@hh.ru/eslint-config", "prettier"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "parser": "@babel/eslint-parser",
+    "requireConfigFile": false
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": "@hh.ru/eslint-config/typescript",
+      "excludedFiles": "vite.config.ts",
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-non-null-assertion": 0,
+        "import/extensions": 0,
+        "react/react-in-jsx-scope": 0,
+        "import/no-unresolved": 0,
+        "spaced-comment": 0,
+        "react-hooks/exhaustive-deps": "warn"
+      }
+    }
+  ],
+  "ignorePatterns": ["dist", ".eslintrc.cjs", "vite.config.ts"]
+}
