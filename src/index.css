@@ -1,4 +1,7 @@
 body {
+  --bgg: rgb(123, 23, 43);
+
+  background-color: var(--bgg);
   margin: 0;
   display: flex;
   place-items: center;
