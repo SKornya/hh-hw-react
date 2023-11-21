@@ -22,6 +22,7 @@
   "devDependencies": {
     "@babel/core": "7.21.4",
     "@hh.ru/eslint-config": "^15.1.1",
+    "@hh.ru/eslint-plugin-import-rules": "^1.5.2",
     "@hh.ru/stylelint-config-hh": "^10.2.1",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
@@ -29,6 +30,10 @@
     "@typescript-eslint/parser": "5.51.0",
     "@vitejs/plugin-react": "^4.2.0",
     "eslint": "7.32.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-dollar-sign": "^1.0.2",
+    "eslint-plugin-etc": "^2.0.3",
+    "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-react-refresh": "^0.4.4",
@@ -51,5 +56,9 @@
     "*.{ts,tsx,css}": "yarn format",
     "*.{ts,tsx}": "yarn lint",
     "*.{css,less}": "yarn style-lint"
+  },
+  "packageManager": "yarn@4.0.2",
+  "installConfig": {
+    "pnp": true
   }
 }
