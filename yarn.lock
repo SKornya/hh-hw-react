@@ -3183,6 +3183,7 @@ __metadata:
     husky: "npm:^8.0.0"
     less: "npm:^4.2.0"
     lint-staged: "npm:^15.1.0"
+    postcss: "npm:^8.4.31"
     postcss-less: "npm:^6.0.0"
     prettier: "npm:2.8.7"
     react: "npm:^18.2.0"

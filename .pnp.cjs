@@ -47,6 +47,7 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:8.0.3"],\
           ["less", "npm:4.2.0"],\
           ["lint-staged", "npm:15.1.0"],\
+          ["postcss", "npm:8.4.31"],\
           ["postcss-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:6.0.0"],\
           ["prettier", "npm:2.8.7"],\
           ["react", "npm:18.2.0"],\
@@ -4324,6 +4325,7 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:8.0.3"],\
           ["less", "npm:4.2.0"],\
           ["lint-staged", "npm:15.1.0"],\
+          ["postcss", "npm:8.4.31"],\
           ["postcss-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:6.0.0"],\
           ["prettier", "npm:2.8.7"],\
           ["react", "npm:18.2.0"],\
@@ -6058,7 +6060,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["postcss-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:6.0.0"],\
           ["@types/postcss", null],\
-          ["postcss", null]\
+          ["postcss", "npm:8.4.31"]\
         ],\
         "packagePeers": [\
           "@types/postcss",\
@@ -7019,7 +7021,7 @@ const RAW_RUNTIME_STATE =
           ["stylelint-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:2.0.0"],\
           ["@types/postcss", null],\
           ["@types/stylelint", null],\
-          ["postcss", null],\
+          ["postcss", "npm:8.4.31"],\
           ["postcss-resolve-nested-selector", "npm:0.1.1"],\
           ["postcss-value-parser", "npm:4.2.0"],\
           ["stylelint", "npm:15.11.0"]\
