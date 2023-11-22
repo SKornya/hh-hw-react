@@ -23,5 +23,8 @@
       }
     }
   ],
-  "ignorePatterns": ["dist", ".eslintrc.cjs", "vite.config.ts"]
+  "rules": {
+    "@hh.ru/import-rules/hh-import-order": 0
+  },
+  "ignorePatterns": ["dist", ".eslintrc.cjs"]
 }
