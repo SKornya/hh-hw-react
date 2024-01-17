@@ -6,6 +6,7 @@
     "declaration-property-value-allowed-list": null,
     "declaration-property-value-disallowed-list": null,
     "keyframes-name-pattern": null,
-    "selector-max-universal": null
+    "selector-max-universal": null,
+    "selector-nested-pattern": null
   }
 }

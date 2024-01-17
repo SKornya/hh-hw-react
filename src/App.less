@@ -1,0 +1,25 @@
+.settings {
+  /* background-image: url('./assets/settings_icon.svg'); */
+  &__label {
+    cursor: pointer;
+  }
+
+  &__checkbox:checked + &__label > .logo {
+    transition: .5s;
+    transform: rotate(90deg);
+  }
+  
+  &__checkbox {
+    display: none;
+
+    &:checked {
+      transition: .5s;
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.logo {
+  transform: rotate(0deg);
+  transition: .5s;
+}
