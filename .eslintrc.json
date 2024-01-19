@@ -17,7 +17,7 @@
           "error",
           {
             "semi": true,
-            "trailingComma": "all",
+            "trailingComma": "es5",
             "singleQuote": true,
             "bracketSpacing": true,
             "bracketSameLine": false,
