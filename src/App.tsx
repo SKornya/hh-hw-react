@@ -1,12 +1,15 @@
 import { useState } from 'react';
 
 import Settings from './Components/Seettings/Settings';
+import Reviewer from './Components/Reviewer/Reviewer';
 
 import './App.less';
 import settingsIcon from './assets/settings_icon.svg';
 
 const App = () => {
   const [show, setShow] = useState<boolean>(false);
+
+    
 
   return (
     <>
@@ -22,6 +25,7 @@ const App = () => {
         </label>
       </div>
       {show && <Settings />}
+      <Reviewer />
     </>
   );
 };

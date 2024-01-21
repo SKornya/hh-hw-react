@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 
 export interface Settings {
-  login: string;
+  user: string;
   repo: string;
   blacklist: Array<string>;
 }
 
 const defaultSettings: Settings = {
-  login: '',
+  user: '',
   repo: '',
   blacklist: [],
 };
 
-const useLocalStorage = (key: string) => {
+const useLocalStorage = () => {
   const [value, setValue] = useState<Settings>(() => {
     try {
-      const localStorageData: string | null = localStorage.getItem(key);
+      const localStorageData: string | null = localStorage.getItem('settings');
 
       if (localStorageData !== null) {
         const data = JSON.parse(localStorageData) as Settings;
@@ -24,15 +24,13 @@ const useLocalStorage = (key: string) => {
       }
       // return typeof data === Settings ? data : null;
     } catch (e) {
-      // console.log(e);
+      return defaultSettings;
     }
     return defaultSettings;
   });
-  console.log(value);
-  useEffect(
-    () => localStorage.setItem(key, JSON.stringify(value)),
-    [key, value]
-  );
+  useEffect(() => {
+    localStorage.setItem('settings', JSON.stringify(value));
+  }, [value]);
 
   return [value, setValue];
 };

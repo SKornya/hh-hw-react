@@ -8,8 +8,8 @@ import blacklistIcon from '../../assets/blacklist_icon.svg';
 const Settings = () => {
   return (
     <div className="settings-container">
-      <Input classname="user" imgSrc={userIcon} />
-      <Input classname="repo" imgSrc={repoIcon} />
+      <Input inputType="user" imgSrc={userIcon} />
+      <Input inputType="repo" imgSrc={repoIcon} />
       <Blacklist imgSrc={blacklistIcon} />
     </div>
   );
