@@ -1,6 +1,10 @@
-import { FunctionComponent, useRef } from 'react';
+import { FunctionComponent, useContext, useRef, useState } from 'react';
 
-import useLocalStorage, { Settings } from '../../hooks/useLocalStorage';
+import { StorageContext, Settings } from '../../Context/StorageContext';
+
+import './Input.less';
+
+// import debounce from '../../debounce';
 
 interface InputProps {
   inputType: string;
@@ -8,18 +12,35 @@ interface InputProps {
 }
 
 const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
-  const [settings, setSettings] = useLocalStorage() as [
-    Settings,
-    React.Dispatch<React.SetStateAction<Settings>>
-  ];
-
+  const context = useContext(StorageContext);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [inputValue, setInputValue] = useState(() => {
+    if (context) {
+      return `${context.settings[inputType] as string}`;
+    }
+    return '';
+  });
+
+  if (!context) {
+    return null;
+  }
+
+  const { settings, setSettings, setDataToLocalStorage } = context;
 
   const setUserSetting = () => {
     const value = inputRef.current?.value;
 
     if (value) {
-      setSettings({ ...settings, [inputType]: value });
+      setInputValue(value);
+
+      const newSettings: Settings = {
+        ...settings,
+        [inputType]: value,
+      };
+
+      setDataToLocalStorage(newSettings);
+      setSettings(newSettings);
     }
   };
 
@@ -33,7 +54,7 @@ const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
         ref={inputRef}
         onChange={setUserSetting}
         className={`${inputType}__input`}
-        value={`${settings[inputType]}`}
+        value={inputValue}
       />
     </div>
   );

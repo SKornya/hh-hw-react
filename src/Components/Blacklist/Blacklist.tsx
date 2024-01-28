@@ -1,6 +1,5 @@
-import { FormEvent, FunctionComponent, useRef } from 'react';
-
-import useLocalStorage, { Settings } from '../../hooks/useLocalStorage';
+import { FormEvent, FunctionComponent, useContext, useRef } from 'react';
+import { StorageContext } from '../../Context/StorageContext';
 
 interface BlacklistProps {
   imgSrc: string;
@@ -10,26 +9,30 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [settings, setSettings] = useLocalStorage() as [
-    Settings,
-    React.Dispatch<React.SetStateAction<Settings>>
-  ];
+  const context = useContext(StorageContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { settings, setSettings, setDataToLocalStorage } = context;
+  const { blacklist } = settings;
 
   const removeFromBlacklist = (user: string) => {
-    const { blacklist } = settings;
     const newBlacklist = blacklist.filter((login) => login !== user);
     const newSettings = { ...settings, blacklist: newBlacklist };
 
+    setDataToLocalStorage(newSettings);
     setSettings(newSettings);
   };
 
   const addToBlacklist = (e: FormEvent) => {
     e.preventDefault();
     const login = inputRef.current?.value;
-    const { blacklist } = settings;
 
     if (login) {
       const newSettings = { ...settings, blacklist: [...blacklist, login] };
+      setDataToLocalStorage(newSettings);
       setSettings(newSettings);
     }
 
@@ -39,14 +42,14 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
   return (
     <div>
       <form ref={formRef} className="blacklist" onSubmit={addToBlacklist}>
-        <img src={imgSrc} alt="" />
+        <img src={imgSrc} alt="blacklist-logo" className="blacklist-logo" />
         <button>Add login to blacklist</button>
         <input ref={inputRef} />
       </form>
 
-      {settings.blacklist.length > 0 ? (
+      {blacklist.length > 0 ? (
         <ul>
-          {settings.blacklist.map((user) => (
+          {blacklist.map((user) => (
             <li key={user}>
               <span>{user}</span>
               <button onClick={() => removeFromBlacklist(user)}>remove</button>

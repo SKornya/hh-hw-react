@@ -1,0 +1,15 @@
+.create-styles(@class) {
+  .@{class} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
+}
+
+.generate-styles() {
+  .create-styles('user');
+  .create-styles('repo');
+}
+
+.generate-styles();

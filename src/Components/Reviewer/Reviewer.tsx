@@ -1,52 +1,127 @@
-import { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { FunctionComponent, useContext, useState } from 'react';
 
-import useLocalStorage, { Settings } from '../../hooks/useLocalStorage';
+import { StorageContext } from '../../Context/StorageContext';
 
-// interface ReviewerProps {
-//   inputType: string;
-//   imgSrc: string;
+import './Reviewer.less';
+// import useLocalStorage, { Settings } from '../../hooks/useLocalStorage';
+
+interface Contributor {
+  login: string;
+  html_url: string;
+}
+
+// interface Reviewer extends Contributor {
+//   link: string;
 // }
 
-const rootURL = 'https://api.github.com';
+const ROOT_URL = 'https://api.github.com';
 
 const Reviewer: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [contributors, setContributors] = useState<Array<string>>([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  // const [contributors, setContributors] = useState<Array<Contributor>>([]);
+  const [reviewer, setReviewer] = useState<Contributor | null>(null);
 
-  const [settings, setSettings] = useLocalStorage() as [
-    Settings,
-    React.Dispatch<React.SetStateAction<Settings>>
-  ];
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorStatus, setErrorStatus] = useState<number | null>(null);
 
+  const context = useContext(StorageContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { settings } = context;
   const { user, repo, blacklist } = settings;
 
-  const searchUser = async () => {
+  const getRandomReviewer = (contributors: Array<Contributor>) => {
+    const filteredContributors = contributors.filter(
+      (contributor) => !blacklist.some((item) => item === contributor.login)
+    );
+    const randomIndex = Math.floor(Math.random() * filteredContributors.length);
+    const reviewer = filteredContributors[randomIndex];
+    setReviewer(reviewer);
+  };
+
+  const searchContributor = async (): Promise<void> => {
+    setIsLoaded(false);
+    setIsLoading(true);
+
     const getData = async () => {
+      setErrorMessage(null);
+      setErrorStatus(null);
+
       try {
-        setIsLoading(true);
         const response = await fetch(
-          `${rootURL}/repos/${user}/${repo}/contributors`
+          `${ROOT_URL}/repos/${user}/${repo}/contributors`
         );
+
+        if (!response.ok) {
+          setErrorStatus(response.status);
+          if (response.status === 404) {
+            throw Error('Not Found! Check user or repo settings.');
+          }
+          throw Error('Error occurs!');
+        }
+
         setIsLoading(false);
         return response.json();
       } catch (e) {
-        console.log(e);
-        return 'error';
+        throw e;
       }
     };
 
-    const data = await getData();
-    console.log(data.map((contributor) => contributor.login));
+    try {
+      const data = (await getData()) as Array<Contributor>;
+      const mappedContributors: Array<Contributor> = data.map(
+        (contributor) => ({
+          login: contributor.login,
+          html_url: contributor.html_url,
+        })
+      );
+      // setContributors(mappedContributors);
+      setIsLoaded(true);
+
+      getRandomReviewer(mappedContributors);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrorMessage(e.message);
+      }
+      setIsLoading(false);
+    }
   };
 
-  return isLoading ? (
-    <span>Spinner</span>
-  ) : user ? (
-    <button disabled={isLoading} onClick={searchUser}>
-      Search reviewer for {user}!
-    </button>
-  ) : (
-    <div>Fill settings to start use app</div>
+  return (
+    <div className="content">
+      {isLoading && <div className="spinner"></div>}
+
+      {!isLoading && user && (
+        <button disabled={isLoading || !user} onClick={searchContributor}>
+          Search reviewer for {user}!
+        </button>
+      )}
+
+      {!user && !errorMessage && <div>Fill settings to start use app</div>}
+
+      {errorMessage && (
+        <div>
+          Oops! {errorMessage} Error status is {errorStatus}
+        </div>
+      )}
+
+      {isLoaded && (
+        <div className="content__contributors">
+          Your reviewer is{' '}
+          <a
+            href={reviewer?.html_url}
+            className="content__contributors-link"
+            target="_blank"
+          >
+            {reviewer?.login}
+          </a>
+        </div>
+      )}
+    </div>
   );
 };
 
