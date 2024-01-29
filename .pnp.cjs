@@ -52,6 +52,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:2.8.8"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:18.2.0"],\
+          ["redux", "npm:5.0.1"],\
           ["stylelint", "npm:15.11.0"],\
           ["stylelint-config-prettier", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:9.0.5"],\
           ["stylelint-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:2.0.0"],\
@@ -4330,6 +4331,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:2.8.8"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:18.2.0"],\
+          ["redux", "npm:5.0.1"],\
           ["stylelint", "npm:15.11.0"],\
           ["stylelint-config-prettier", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:9.0.5"],\
           ["stylelint-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:2.0.0"],\
@@ -6345,6 +6347,15 @@ const RAW_RUNTIME_STATE =
           ["redent", "npm:4.0.0"],\
           ["indent-string", "npm:5.0.0"],\
           ["strip-indent", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["redux", [\
+      ["npm:5.0.1", {\
+        "packageLocation": "../../.yarn/berry/cache/redux-npm-5.0.1-f8e6b1cb23-10c0.zip/node_modules/redux/",\
+        "packageDependencies": [\
+          ["redux", "npm:5.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\

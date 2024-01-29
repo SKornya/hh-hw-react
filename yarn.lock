@@ -3188,6 +3188,7 @@ __metadata:
     prettier: "npm:^2.8.7"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
+    redux: "npm:^5.0.1"
     stylelint: "npm:^15.11.0"
     stylelint-config-prettier: "npm:^9.0.5"
     stylelint-less: "npm:^2.0.0"
@@ -4988,6 +4989,13 @@ __metadata:
     indent-string: "npm:^5.0.0"
     strip-indent: "npm:^4.0.0"
   checksum: a9b640c8f4b2b5b26a1a908706475ff404dd50a97d6f094bc3c59717be922622927cc7d601d4ae2857d897ad243fd979bd76d751a0481cee8be7024e5fb4c662
+  languageName: node
+  linkType: hard
+
+"redux@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "redux@npm:5.0.1"
+  checksum: b10c28357194f38e7d53b760ed5e64faa317cc63de1fb95bc5d9e127fab956392344368c357b8e7a9bedb0c35b111e7efa522210cfdc3b3c75e5074718e9069c
   languageName: node
   linkType: hard
 

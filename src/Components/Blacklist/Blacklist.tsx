@@ -1,5 +1,5 @@
-import { FormEvent, FunctionComponent, useContext, useRef } from 'react';
-import { StorageContext } from '../../Context/StorageContext';
+import { FormEvent, FunctionComponent, useRef } from 'react';
+import store, { removeFromBlacklist, addToBlacklist } from '../../store';
 
 import './Blacklist.less';
 
@@ -11,34 +11,18 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const context = useContext(StorageContext);
+  const blacklist = store.getState().settings.blacklist;
 
-  if (!context) {
-    return null;
-  }
-
-  const { settings, setSettings, setDataToLocalStorage } = context;
-  const { blacklist } = settings;
-
-  const removeFromBlacklist = (user: string) => {
-    const newBlacklist = blacklist.filter((login) => login !== user);
-    const newSettings = { ...settings, blacklist: newBlacklist };
-
-    setDataToLocalStorage(newSettings);
-    setSettings(newSettings);
+  const removeLogin = (login: string) => {
+    store.dispatch(removeFromBlacklist(login));
   };
 
-  const addToBlacklist = (e: FormEvent) => {
+  const addLogin = (e: FormEvent) => {
     e.preventDefault();
     const login = inputRef.current?.value;
 
-    if (login && !blacklist.includes(login.toLowerCase())) {
-      const newSettings = {
-        ...settings,
-        blacklist: [...blacklist, login.toLowerCase()],
-      };
-      setDataToLocalStorage(newSettings);
-      setSettings(newSettings);
+    if (login !== undefined && !blacklist.includes(login.toLowerCase())) {
+      store.dispatch(addToBlacklist(login.toLowerCase()));
     }
 
     formRef.current?.reset();
@@ -46,7 +30,7 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
 
   return (
     <div className="blacklist">
-      <form ref={formRef} className="blacklist__form" onSubmit={addToBlacklist}>
+      <form ref={formRef} className="blacklist__form" onSubmit={addLogin}>
         <div className="blacklist__form-container">
           <label htmlFor="blacklist__input" className="blacklist__label">
             <img src={imgSrc} alt="blacklist-logo" className="blacklist-logo" />
@@ -63,12 +47,12 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
 
       {blacklist.length > 0 ? (
         <ul className="blacklist__list">
-          {blacklist.map((user) => (
-            <li key={user} className="blacklist__list-element">
-              <div className="blacklist__list-user">{user}</div>
+          {blacklist.map((login) => (
+            <li key={login} className="blacklist__list-element">
+              <div className="blacklist__list-user">{login}</div>
               <button
                 className="blacklist__button-remove"
-                onClick={() => removeFromBlacklist(user)}
+                onClick={() => removeLogin(login)}
               ></button>
             </li>
           ))}

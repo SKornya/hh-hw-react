@@ -1,6 +1,6 @@
-import { FunctionComponent, useContext, useRef, useState } from 'react';
-
-import { StorageContext, Settings } from '../../Context/StorageContext';
+import { FunctionComponent, useRef, useState } from 'react';
+import store, { setRepo, setUser } from '../../store';
+// import { StorageContext, Settings } from '../../Context/StorageContext';
 
 import './Input.less';
 
@@ -10,21 +10,9 @@ interface InputProps {
 }
 
 const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
-  const context = useContext(StorageContext);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const [inputValue, setInputValue] = useState(() => {
-    if (context) {
-      return `${context.settings[inputType] as string}`;
-    }
-    return '';
-  });
-
-  if (!context) {
-    return null;
-  }
-
-  const { settings, setSettings, setDataToLocalStorage } = context;
+  const settings = store.getState().settings;
+  const [inputValue, setInputValue] = useState(settings[inputType] as string);
 
   const setUserSetting = () => {
     const value = inputRef.current?.value;
@@ -32,13 +20,11 @@ const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
     if (value !== undefined) {
       setInputValue(value);
 
-      const newSettings: Settings = {
-        ...settings,
-        [inputType]: value,
-      };
-
-      setDataToLocalStorage(newSettings);
-      setSettings(newSettings);
+      if (inputType === 'user') {
+        store.dispatch(setUser(value));
+      } else if (inputType === 'repo') {
+        store.dispatch(setRepo(value));
+      }
     }
   };
 
