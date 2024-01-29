@@ -1,6 +1,8 @@
 import { FormEvent, FunctionComponent, useContext, useRef } from 'react';
 import { StorageContext } from '../../Context/StorageContext';
 
+import './Blacklist.less';
+
 interface BlacklistProps {
   imgSrc: string;
 }
@@ -30,8 +32,11 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
     e.preventDefault();
     const login = inputRef.current?.value;
 
-    if (login) {
-      const newSettings = { ...settings, blacklist: [...blacklist, login] };
+    if (login && !blacklist.includes(login.toLowerCase())) {
+      const newSettings = {
+        ...settings,
+        blacklist: [...blacklist, login.toLowerCase()],
+      };
       setDataToLocalStorage(newSettings);
       setSettings(newSettings);
     }
@@ -40,19 +45,30 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
   };
 
   return (
-    <div>
-      <form ref={formRef} className="blacklist" onSubmit={addToBlacklist}>
-        <img src={imgSrc} alt="blacklist-logo" className="blacklist-logo" />
-        <button>Add login to blacklist</button>
-        <input ref={inputRef} />
+    <div className="blacklist">
+      <form ref={formRef} className="blacklist__form" onSubmit={addToBlacklist}>
+        <div className="blacklist__form-container">
+          <label htmlFor="blacklist__input" className="blacklist__label">
+            <img src={imgSrc} alt="blacklist-logo" className="blacklist-logo" />
+          </label>
+          <input
+            ref={inputRef}
+            id="blacklist__input"
+            className="blacklist__input"
+          />
+        </div>
+        <button className="blacklist__button"></button>
       </form>
 
       {blacklist.length > 0 ? (
-        <ul>
+        <ul className="blacklist__list">
           {blacklist.map((user) => (
-            <li key={user}>
-              <span>{user}</span>
-              <button onClick={() => removeFromBlacklist(user)}>remove</button>
+            <li key={user} className="blacklist__list-element">
+              <div className="blacklist__list-user">{user}</div>
+              <button
+                className="blacklist__button-remove"
+                onClick={() => removeFromBlacklist(user)}
+              ></button>
             </li>
           ))}
         </ul>

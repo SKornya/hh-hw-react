@@ -4,8 +4,6 @@ import { StorageContext, Settings } from '../../Context/StorageContext';
 
 import './Input.less';
 
-// import debounce from '../../debounce';
-
 interface InputProps {
   inputType: string;
   imgSrc: string;
@@ -31,7 +29,7 @@ const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
   const setUserSetting = () => {
     const value = inputRef.current?.value;
 
-    if (value) {
+    if (value !== undefined) {
       setInputValue(value);
 
       const newSettings: Settings = {
@@ -46,8 +44,8 @@ const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
 
   return (
     <div className={inputType}>
-      <label htmlFor={inputType}>
-        <img src={imgSrc} alt="" />
+      <label htmlFor={inputType} className={`${inputType}__label`}>
+        <img src={imgSrc} alt={inputType} className="input-logo" />
       </label>
       <input
         id={inputType}
