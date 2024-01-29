@@ -50,6 +50,7 @@ const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
       <input
         id={inputType}
         ref={inputRef}
+        placeholder={inputType}
         onChange={setUserSetting}
         className={`${inputType}__input`}
         value={inputValue}

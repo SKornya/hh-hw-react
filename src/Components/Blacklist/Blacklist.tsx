@@ -53,6 +53,7 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
           </label>
           <input
             ref={inputRef}
+            placeholder="add login to blacklist"
             id="blacklist__input"
             className="blacklist__input"
           />
