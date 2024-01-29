@@ -1,0 +1,64 @@
+.content {
+  padding: 5px;
+
+  display: flex;
+  flex-direction: column;
+
+  &__button.button {
+    background-color: #00a6ff;
+    margin: 10px 0;
+  }
+
+  &__initial, &__error, &__contributor {
+    margin: 10px 0;
+    text-align: center
+  }
+
+  &__initial {
+    height: 50px;
+    padding-top: 15px;
+  }
+
+  &__error {
+    color: red;
+  }
+
+  &__contributor {
+    font-size: 24px;
+
+    &-link {
+      font-size: 20px;
+
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+
+  &::after {
+    content: " ";
+    display: block;
+    width: 44px;
+    height: 44px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #000;
+    border-color: #000 transparent #000 transparent;
+    animation: spinner 1.2s linear infinite;
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,5 +1,15 @@
-import './App.css';
+import Settings from './Components/Seettings/Settings';
+import Reviewer from './Components/Reviewer/Reviewer';
 
-const App = () => <></>;
+import './App.less';
+
+const App = () => {
+  return (
+    <>
+      <Settings />
+      <Reviewer />
+    </>
+  );
+};
 
 export default App;

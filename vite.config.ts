@@ -4,5 +4,5 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/hh-hw-env",
+  base: "/hh-hw-react",
 });
