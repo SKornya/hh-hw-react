@@ -98,7 +98,7 @@ const Reviewer: FunctionComponent = () => {
         </button>
       )}
 
-      {(!user || !repo) && !errorMessage && (
+      {(!user || !repo) && (
         <div className="content__initial">Fill settings to start use app</div>
       )}
 
