@@ -1,6 +1,11 @@
-import { FunctionComponent, useContext, useState } from 'react';
-
-import { StorageContext } from '../../Context/StorageContext';
+import { FunctionComponent, useState } from 'react';
+import store, {
+  setError,
+  setFilling,
+  setLoaded,
+  setLoading,
+} from '../../store';
+// import { StorageContext } from '../../Context/StorageContext';
 
 import './Reviewer.less';
 
@@ -12,21 +17,18 @@ interface Contributor {
 const ROOT_URL = 'https://api.github.com';
 
 const Reviewer: FunctionComponent = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [reviewer, setReviewer] = useState<Contributor | null>(null);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [errorStatus, setErrorStatus] = useState<number | null>(null);
 
-  const context = useContext(StorageContext);
-
-  if (!context) {
-    return null;
-  }
-
-  const { settings } = context;
+  const state = store.getState();
+  const { settings, status } = state;
   const { user, repo, blacklist } = settings;
+
+  console.log(status);
 
   const getRandomReviewer = (contributors: Array<Contributor>) => {
     const filteredContributors = contributors.filter(
@@ -38,8 +40,8 @@ const Reviewer: FunctionComponent = () => {
   };
 
   const searchContributor = async (): Promise<void> => {
-    setIsLoaded(false);
-    setIsLoading(true);
+    // setIsLoaded(false);
+    // setIsLoading(true);
 
     const getData = async () => {
       setErrorMessage(null);
@@ -51,19 +53,26 @@ const Reviewer: FunctionComponent = () => {
         );
 
         if (!response.ok) {
-          setErrorStatus(response.status);
+          store.dispatch(
+            setError({
+              code: response.status,
+            })
+          );
+          // setErrorStatus(response.status);
           if (response.status === 404) {
             throw Error('Not Found! Check user or repo settings.');
           }
           throw Error('Error occurs!');
         }
 
-        setIsLoading(false);
+        // setIsLoading(false);
         return response.json();
       } catch (e) {
         throw e;
       }
     };
+
+    store.dispatch(setLoading());
 
     try {
       const data = (await getData()) as Array<Contributor>;
@@ -73,14 +82,21 @@ const Reviewer: FunctionComponent = () => {
           html_url: contributor.html_url,
         })
       );
-      setIsLoaded(true);
+      // setIsLoaded(true);
+      store.dispatch(setLoaded());
 
       getRandomReviewer(mappedContributors);
     } catch (e) {
       if (e instanceof Error) {
-        setErrorMessage(e.message);
+        store.dispatch(
+          setError({
+            message: e.message,
+          })
+        );
+        // setErrorMessage(e.message);
       }
-      setIsLoading(false);
+      // setIsLoading(false);
+      store.dispatch(setFilling());
     }
   };
 
@@ -91,7 +107,7 @@ const Reviewer: FunctionComponent = () => {
       {!isLoading && user && repo && (
         <button
           className="button content__button"
-          disabled={isLoading || !user || !repo}
+          // disabled={isLoading || !user || !repo}
           onClick={searchContributor}
         >
           Search reviewer for {user}!
@@ -109,7 +125,7 @@ const Reviewer: FunctionComponent = () => {
       )}
 
       {isLoaded && user && repo && (
-        <div className="content__contributor">
+        <div className="content_ _contributor">
           {reviewer ? (
             <>
               Your reviewer

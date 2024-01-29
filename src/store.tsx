@@ -7,13 +7,24 @@ interface Settings {
   [key: string]: string | Array<string>;
 }
 
-type Status = string;
+interface Status {
+  status: string;
+  error: {
+    message: string;
+    code: number | null;
+  };
+}
 
 interface Action {
   type: string;
+  payload?: {
+    message?: string;
+    code?: number;
+  };
 }
 
-interface SettingsAction extends Action {
+interface SettingsAction {
+  type: string;
   payload: string;
 }
 
@@ -33,7 +44,13 @@ const initialSettings = {
   blacklist: [],
 };
 
-const initialStatus = FILLING;
+const initialStatus = {
+  status: FILLING,
+  error: {
+    message: '',
+    code: null,
+  },
+};
 
 const setUser = (user: string): SettingsAction => ({
   type: SETUSER,
@@ -63,8 +80,9 @@ const setLoaded = (): Action => ({
   type: LOADED,
 });
 
-const setError = (): Action => ({
+const setError = (error: { message?: string; code?: number }): Action => ({
   type: ERROR,
+  payload: error,
 });
 
 const setFilling = (): Action => ({
@@ -97,8 +115,12 @@ const statusReducer = (state: Status = initialStatus, action: Action) => {
     case FILLING:
     case LOADING:
     case LOADED:
+      return { ...state, status: action.type };
     case ERROR:
-      return action.type;
+      return {
+        status: action.type,
+        error: { ...state.error, ...action.payload },
+      };
     default:
       return state;
   }
