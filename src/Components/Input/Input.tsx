@@ -1,6 +1,14 @@
 import { FunctionComponent, useRef, useState } from 'react';
-import store, { setFilling, setRepo, setUser } from '../../store';
-// import { StorageContext, Settings } from '../../Context/StorageContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
+import {
+  RootState,
+  Action,
+  SettingsAction,
+  setFilling,
+  setUser,
+  setRepo,
+} from '../../store';
 
 import './Input.less';
 
@@ -11,11 +19,12 @@ interface InputProps {
 
 const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const settings = store.getState().settings;
+  const dispatch = useDispatch<Dispatch<Action | SettingsAction>>();
+  const settings = useSelector((state: RootState) => state.settings);
   const [inputValue, setInputValue] = useState(settings[inputType] as string);
 
   const setUserSetting = () => {
-    store.dispatch(setFilling());
+    dispatch(setFilling());
 
     const value = inputRef.current?.value;
 
@@ -23,9 +32,9 @@ const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
       setInputValue(value);
 
       if (inputType === 'user') {
-        store.dispatch(setUser(value));
+        dispatch(setUser(value));
       } else if (inputType === 'repo') {
-        store.dispatch(setRepo(value));
+        dispatch(setRepo(value));
       }
     }
   };

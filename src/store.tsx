@@ -15,7 +15,7 @@ interface Status {
   };
 }
 
-interface Action {
+export interface Action {
   type: string;
   payload?: {
     message?: string;
@@ -23,7 +23,7 @@ interface Action {
   };
 }
 
-interface SettingsAction {
+export interface SettingsAction {
   type: string;
   payload: string;
 }
@@ -132,6 +132,8 @@ const reducer = combineReducers({
 });
 
 const store = createStore(reducer);
+
+export type RootState = ReturnType<typeof store.getState>;
 
 export default store;
 

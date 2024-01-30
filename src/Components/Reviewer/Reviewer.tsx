@@ -1,9 +1,13 @@
 import { FunctionComponent, useState } from 'react';
-import store, {
+import { Dispatch } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {
   setError,
-  // setFilling,
   setLoaded,
   setLoading,
+  RootState,
+  Action,
+  SettingsAction,
 } from '../../store';
 
 import './Reviewer.less';
@@ -18,8 +22,10 @@ const ROOT_URL = 'https://api.github.com';
 const Reviewer: FunctionComponent = () => {
   const [reviewer, setReviewer] = useState<Contributor | null>(null);
 
-  const state = store.getState();
-  const { settings, status } = state;
+  const dispatch = useDispatch<Dispatch<Action | SettingsAction>>();
+
+  const settings = useSelector((state: RootState) => state.settings);
+  const status = useSelector((state: RootState) => state.status);
   const { user, repo, blacklist } = settings;
 
   const getRandomReviewer = (contributors: Array<Contributor>) => {
@@ -39,7 +45,7 @@ const Reviewer: FunctionComponent = () => {
         );
 
         if (!response.ok) {
-          store.dispatch(
+          dispatch(
             setError({
               code: response.status,
             })
@@ -56,7 +62,7 @@ const Reviewer: FunctionComponent = () => {
       }
     };
 
-    store.dispatch(setLoading());
+    dispatch(setLoading());
 
     try {
       const data = (await getData()) as Array<Contributor>;
@@ -66,12 +72,12 @@ const Reviewer: FunctionComponent = () => {
           html_url: contributor.html_url,
         })
       );
-      store.dispatch(setLoaded());
+      dispatch(setLoaded());
 
       getRandomReviewer(mappedContributors);
     } catch (e) {
       if (e instanceof Error) {
-        store.dispatch(
+        dispatch(
           setError({
             message: e.message,
           })

@@ -1,5 +1,13 @@
 import { FormEvent, FunctionComponent, useRef } from 'react';
-import store, { removeFromBlacklist, addToBlacklist } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
+import {
+  removeFromBlacklist,
+  addToBlacklist,
+  RootState,
+  Action,
+  SettingsAction,
+} from '../../store';
 
 import './Blacklist.less';
 
@@ -8,13 +16,15 @@ interface BlacklistProps {
 }
 
 const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
+  const dispatch = useDispatch<Dispatch<Action | SettingsAction>>();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const blacklist = store.getState().settings.blacklist;
+  const blacklist = useSelector((state: RootState) => state.settings.blacklist);
 
   const removeLogin = (login: string) => {
-    store.dispatch(removeFromBlacklist(login));
+    dispatch(removeFromBlacklist(login));
   };
 
   const addLogin = (e: FormEvent) => {
@@ -22,7 +32,7 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
     const login = inputRef.current?.value;
 
     if (login !== undefined && !blacklist.includes(login.toLowerCase())) {
-      store.dispatch(addToBlacklist(login.toLowerCase()));
+      dispatch(addToBlacklist(login.toLowerCase()));
     }
 
     formRef.current?.reset();
