@@ -121,7 +121,7 @@ const Reviewer: FunctionComponent = () => {
 
       {status.status === 'ERROR' && (
         <div className="content__error">
-          Oops! {status.error.code} Error status is {status.error.message}
+          Oops! {status.error.message} Error status is {status.error.code}
         </div>
       )}
     </div>
