@@ -1,5 +1,5 @@
 import { FunctionComponent, useRef, useState } from 'react';
-import store, { setRepo, setUser } from '../../store';
+import store, { setFilling, setRepo, setUser } from '../../store';
 // import { StorageContext, Settings } from '../../Context/StorageContext';
 
 import './Input.less';
@@ -15,6 +15,8 @@ const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
   const [inputValue, setInputValue] = useState(settings[inputType] as string);
 
   const setUserSetting = () => {
+    store.dispatch(setFilling());
+
     const value = inputRef.current?.value;
 
     if (value !== undefined) {

@@ -1,11 +1,10 @@
 import { FunctionComponent, useState } from 'react';
 import store, {
   setError,
-  setFilling,
+  // setFilling,
   setLoaded,
   setLoading,
 } from '../../store';
-// import { StorageContext } from '../../Context/StorageContext';
 
 import './Reviewer.less';
 
@@ -17,18 +16,11 @@ interface Contributor {
 const ROOT_URL = 'https://api.github.com';
 
 const Reviewer: FunctionComponent = () => {
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [reviewer, setReviewer] = useState<Contributor | null>(null);
-
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [errorStatus, setErrorStatus] = useState<number | null>(null);
 
   const state = store.getState();
   const { settings, status } = state;
   const { user, repo, blacklist } = settings;
-
-  console.log(status);
 
   const getRandomReviewer = (contributors: Array<Contributor>) => {
     const filteredContributors = contributors.filter(
@@ -40,13 +32,7 @@ const Reviewer: FunctionComponent = () => {
   };
 
   const searchContributor = async (): Promise<void> => {
-    // setIsLoaded(false);
-    // setIsLoading(true);
-
     const getData = async () => {
-      setErrorMessage(null);
-      setErrorStatus(null);
-
       try {
         const response = await fetch(
           `${ROOT_URL}/repos/${user}/${repo}/contributors`
@@ -58,14 +44,12 @@ const Reviewer: FunctionComponent = () => {
               code: response.status,
             })
           );
-          // setErrorStatus(response.status);
           if (response.status === 404) {
             throw Error('Not Found! Check user or repo settings.');
           }
           throw Error('Error occurs!');
         }
 
-        // setIsLoading(false);
         return response.json();
       } catch (e) {
         throw e;
@@ -82,7 +66,6 @@ const Reviewer: FunctionComponent = () => {
           html_url: contributor.html_url,
         })
       );
-      // setIsLoaded(true);
       store.dispatch(setLoaded());
 
       getRandomReviewer(mappedContributors);
@@ -93,53 +76,46 @@ const Reviewer: FunctionComponent = () => {
             message: e.message,
           })
         );
-        // setErrorMessage(e.message);
       }
-      // setIsLoading(false);
-      store.dispatch(setFilling());
     }
   };
 
   return (
     <div className="content">
-      {isLoading && <div className="spinner"></div>}
+      <button
+        className="button content__button"
+        disabled={!user || !repo}
+        onClick={searchContributor}
+      >
+        {user && repo
+          ? 'Search reviewer'
+          : 'Fill user and repo fileds in settings'}
+      </button>
 
-      {!isLoading && user && repo && (
-        <button
-          className="button content__button"
-          // disabled={isLoading || !user || !repo}
-          onClick={searchContributor}
-        >
-          Search reviewer for {user}!
-        </button>
-      )}
+      {status.status === 'LOADING' && <div className="spinner"></div>}
 
-      {(!user || !repo) && (
-        <div className="content__initial">Fill settings to start use app</div>
-      )}
-
-      {errorMessage && (
-        <div className="content__error">
-          Oops! {errorMessage} Error status is {errorStatus}
-        </div>
-      )}
-
-      {isLoaded && user && repo && (
-        <div className="content_ _contributor">
+      {status.status === 'LOADED' && (
+        <div className="content__contributor">
           {reviewer ? (
             <>
               Your reviewer
               <a
-                href={reviewer?.html_url}
+                href={reviewer.html_url}
                 className="content__contributor-link"
                 target="_blank"
               >
-                {reviewer?.login}
+                {reviewer.login}
               </a>
             </>
           ) : (
             <>There is no contributors for this user or repository</>
           )}
+        </div>
+      )}
+
+      {status.status === 'ERROR' && (
+        <div className="content__error">
+          Oops! {status.error.code} Error status is {status.error.message}
         </div>
       )}
     </div>
