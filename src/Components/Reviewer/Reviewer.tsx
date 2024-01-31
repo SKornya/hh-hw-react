@@ -5,10 +5,10 @@ import {
   setError,
   setLoaded,
   setLoading,
-  RootState,
   Action,
-  SettingsAction,
-} from '../../store';
+  PayloadAction,
+} from '../../model/model';
+import { RootState } from '../../store';
 
 import './Reviewer.less';
 
@@ -22,7 +22,7 @@ const ROOT_URL = 'https://api.github.com';
 const Reviewer: FunctionComponent = () => {
   const [reviewer, setReviewer] = useState<Contributor | null>(null);
 
-  const dispatch = useDispatch<Dispatch<Action | SettingsAction>>();
+  const dispatch = useDispatch<Dispatch<Action | PayloadAction>>();
 
   const settings = useSelector((state: RootState) => state.settings);
   const status = useSelector((state: RootState) => state.status);
@@ -30,7 +30,8 @@ const Reviewer: FunctionComponent = () => {
 
   const getRandomReviewer = (contributors: Array<Contributor>) => {
     const filteredContributors = contributors.filter(
-      (contributor) => !blacklist.some((item) => item === contributor.login)
+      (contributor) =>
+        !blacklist.list.some((item) => item === contributor.login)
     );
     const randomIndex = Math.floor(Math.random() * filteredContributors.length);
     const reviewer = filteredContributors[randomIndex];

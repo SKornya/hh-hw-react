@@ -4,11 +4,11 @@ import { Dispatch } from 'redux';
 import {
   removeFromBlacklist,
   addToBlacklist,
-  RootState,
   Action,
-  SettingsAction,
+  PayloadAction,
   setCurrentLogin,
-} from '../../store';
+} from '../../model/model';
+import { RootState } from '../../store';
 
 import './Blacklist.less';
 import Input from '../Input/Input';
@@ -18,7 +18,7 @@ interface BlacklistProps {
 }
 
 const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
-  const dispatch = useDispatch<Dispatch<Action | SettingsAction>>();
+  const dispatch = useDispatch<Dispatch<Action | PayloadAction>>();
 
   const blacklist = useSelector(
     (state: RootState) => state.settings.blacklist.list
