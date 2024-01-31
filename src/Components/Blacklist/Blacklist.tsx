@@ -4,9 +4,8 @@ import { Dispatch } from 'redux';
 import {
   removeFromBlacklist,
   addToBlacklist,
-  Action,
-  PayloadAction,
   setCurrentLogin,
+  SettingsAction,
 } from '../../model/model';
 import { RootState } from '../../store';
 
@@ -18,7 +17,7 @@ interface BlacklistProps {
 }
 
 const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
-  const dispatch = useDispatch<Dispatch<Action | PayloadAction>>();
+  const dispatch = useDispatch<Dispatch<SettingsAction>>();
 
   const blacklist = useSelector(
     (state: RootState) => state.settings.blacklist.list

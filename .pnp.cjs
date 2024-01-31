@@ -55,6 +55,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:18.2.0"],\
           ["react-redux", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:9.1.0"],\
           ["redux", "npm:5.0.1"],\
+          ["redux-thunk", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:3.1.0"],\
           ["stylelint", "npm:15.11.0"],\
           ["stylelint-config-prettier", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:9.0.5"],\
           ["stylelint-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:2.0.0"],\
@@ -4379,6 +4380,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:18.2.0"],\
           ["react-redux", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:9.1.0"],\
           ["redux", "npm:5.0.1"],\
+          ["redux-thunk", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:3.1.0"],\
           ["stylelint", "npm:15.11.0"],\
           ["stylelint-config-prettier", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:9.0.5"],\
           ["stylelint-less", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:2.0.0"],\
@@ -6462,6 +6464,28 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/redux-npm-5.0.1-f8e6b1cb23-10c0.zip/node_modules/redux/",\
         "packageDependencies": [\
           ["redux", "npm:5.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["redux-thunk", [\
+      ["npm:3.1.0", {\
+        "packageLocation": "../../.yarn/berry/cache/redux-thunk-npm-3.1.0-6a8fdd3211-10c0.zip/node_modules/redux-thunk/",\
+        "packageDependencies": [\
+          ["redux-thunk", "npm:3.1.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:3.1.0", {\
+        "packageLocation": "./.yarn/__virtual__/redux-thunk-virtual-054d6fe686/3/.yarn/berry/cache/redux-thunk-npm-3.1.0-6a8fdd3211-10c0.zip/node_modules/redux-thunk/",\
+        "packageDependencies": [\
+          ["redux-thunk", "virtual:dc9e1392c69024855f4f574ba7e587c02cde9b06788b137429f7f8d4323d2e044289db49d37a159c0015a2c64992f2555e1a9cbfe89fe37172664abecd961346#npm:3.1.0"],\
+          ["@types/redux", null],\
+          ["redux", "npm:5.0.1"]\
+        ],\
+        "packagePeers": [\
+          "@types/redux",\
+          "redux"\
         ],\
         "linkType": "HARD"\
       }]\

@@ -1,4 +1,5 @@
 import { combineReducers, Dispatch } from 'redux';
+import { RootState } from '../store';
 
 interface Settings {
   user: string;
@@ -9,31 +10,32 @@ interface Settings {
   };
 }
 
+interface Contributor {
+  login: string;
+  html_url: string;
+}
+
 interface Reviewer {
-  data: {
-    login: string;
-    html_url: string;
-  };
-  loading: boolean;
+  data: Contributor;
+  loading: string;
 }
 
-interface Status {
-  // status: string;
-  error: {
-    message: string;
-    code: number | null;
-  };
+interface Error {
+  message: string;
+  code: number | null;
 }
 
-export interface Action {
+export interface ErrorAction {
   type: string;
-  payload?: {
-    message?: string;
-    code?: number;
-  };
+  payload?: string | number;
 }
 
-export interface PayloadAction {
+export interface ReviewerAction {
+  type: string;
+  payload: string;
+}
+
+export interface SettingsAction {
   type: string;
   payload: string;
 }
@@ -44,16 +46,14 @@ const ADDTOBLACKLIST = 'ADDTOBLACKLIST';
 const REMOVEFROMBLACKLIST = 'REMOVEFROMBLAKCLIST';
 const SETCURRENTLOGIN = 'SETCURRENTLOGIN';
 
-// const LOADING = 'LOADING';
-// const LOADED = 'LOADED';
-const ERROR = 'ERROR';
-// const FILLING = 'FILLING';
-const SETLOADING = 'SETLOADING';
+const SETERRORMESSAGE = 'SETERRORMESSAGE';
+const SETERRORCODE = 'SETERRORCODE';
 
 const SETREVIEWERLOGIN = 'SETREVIEWERLOGIN';
 const SETREVIEWERURL = 'SETREVIEWERURL';
+const SETLOADING = 'SETLOADING';
 
-const initialSettings = {
+const initialSettings: Settings = {
   user: '',
   repo: '',
   blacklist: {
@@ -62,77 +62,72 @@ const initialSettings = {
   },
 };
 
-const initialStatus = {
-  // status: FILLING,
-  error: {
-    message: '',
-    code: null,
-  },
+const initialError: Error = {
+  message: '',
+  code: null,
 };
 
-const initialReviewer = {
+const initialReviewer: Reviewer = {
   data: {
     login: '',
     html_url: '',
   },
-  loading: false,
+  loading: 'filling',
 };
 
-const setUser = (user: string): PayloadAction => ({
+const setUser = (user: string): SettingsAction => ({
   type: SETUSER,
   payload: user,
 });
 
-const setRepo = (repo: string): PayloadAction => ({
+const setRepo = (repo: string): SettingsAction => ({
   type: SETREPO,
   payload: repo,
 });
 
-const addToBlacklist = (login: string): PayloadAction => ({
+const addToBlacklist = (login: string): SettingsAction => ({
   type: ADDTOBLACKLIST,
   payload: login,
 });
 
-const removeFromBlacklist = (login: string): PayloadAction => ({
+const removeFromBlacklist = (login: string): SettingsAction => ({
   type: REMOVEFROMBLACKLIST,
   payload: login,
 });
 
-const setCurrentLogin = (login: string): PayloadAction => ({
+const setCurrentLogin = (login: string): SettingsAction => ({
   type: SETCURRENTLOGIN,
   payload: login,
 });
 
-// const setLoading = (): Action => ({
-//   type: LOADING,
-// });
+const setErrorMessage = (message: string): ErrorAction => ({
+  type: SETERRORMESSAGE,
+  payload: message,
+});
 
-// const setLoaded = (): Action => ({
-//   type: LOADED,
-// });
+const setErrorCode = (code: number): ErrorAction => ({
+  type: SETERRORCODE,
+  payload: code,
+});
 
-// const setError = (error: { message?: string; code?: number }): Action => ({
-//   type: ERROR,
-//   payload: error,
-// });
-
-// const setFilling = (): Action => ({
-//   type: FILLING,
-// });
-
-const setReviewerLogin = (login: string): PayloadAction => ({
+const setReviewerLogin = (login: string): ReviewerAction => ({
   type: SETREVIEWERLOGIN,
   payload: login,
 });
 
-const setReviewerURL = (url: string): PayloadAction => ({
+const setReviewerURL = (url: string): ReviewerAction => ({
   type: SETREVIEWERURL,
   payload: url,
 });
 
+const setLoading = (loading: string): ReviewerAction => ({
+  type: SETLOADING,
+  payload: loading,
+});
+
 const settingsReducer = (
   state: Settings = initialSettings,
-  action: PayloadAction
+  action: SettingsAction
 ) => {
   switch (action.type) {
     case SETUSER:
@@ -170,16 +165,17 @@ const settingsReducer = (
   }
 };
 
-const statusReducer = (state: Status = initialStatus, action: Action) => {
+const errorReducer = (state: Error = initialError, action: ErrorAction) => {
   switch (action.type) {
-    // case FILLING:
-    // case LOADING:
-    // case LOADED:
-    //   return { ...state, status: action.type };
-    case ERROR:
+    case SETERRORMESSAGE:
       return {
-        status: action.type,
-        error: { ...state.error, ...action.payload },
+        ...state,
+        message: action.payload,
+      };
+    case SETERRORCODE:
+      return {
+        ...state,
+        code: action.payload,
       };
     default:
       return state;
@@ -188,13 +184,13 @@ const statusReducer = (state: Status = initialStatus, action: Action) => {
 
 const reviewerReducer = (
   state: Reviewer = initialReviewer,
-  action: PayloadAction
+  action: ReviewerAction
 ) => {
   switch (action.type) {
-    case SETREVIEWERLOGIN:
-      return { ...state, data: { ...state.data, login: action.payload } };
     case SETREVIEWERURL:
       return { ...state, data: { ...state.data, html_url: action.payload } };
+    case SETREVIEWERLOGIN:
+      return { ...state, data: { ...state.data, login: action.payload } };
     case SETLOADING:
       return { ...state, loading: action.payload };
     default:
@@ -203,75 +199,77 @@ const reviewerReducer = (
 };
 
 const reducer = combineReducers({
-  settings: settingsReducer,
-  status: statusReducer,
   reviewer: reviewerReducer,
+  settings: settingsReducer,
+  error: errorReducer,
 });
 
-const loadReviewer = () => async (dispatch: Dispatch, getState) => {
-  const state = getState();
+const loadReviewer =
+  () =>
+  async (
+    dispatch: Dispatch<ReviewerAction | SettingsAction | ErrorAction>, // Поменяйте на тип any, если вы хотите использовать любые действия
+    getState: () => RootState
+  ) => {
+    dispatch(setLoading('loading'));
+    dispatch(setReviewerLogin(''));
 
-  const { reviewer, settings, status } = state;
-  const { user, repo, blacklist } = settings;
-  const { login, html_url } = reviewer;
+    const state = getState();
 
-  const ROOT_URL = 'https://api.github.com';
+    const { settings } = state;
+    const { user, repo, blacklist } = settings;
 
-  dispatch(setLoading(true));
+    const ROOT_URL = 'https://api.github.com';
 
-  const getData = async () => {
-    try {
-      const response = await fetch(
-        `${ROOT_URL}/repos/${user}/${repo}/contributors`
-      );
-
-      if (!response.ok) {
-        dispatch(
-          setError({
-            code: response.status,
-          })
+    const getData = async () => {
+      try {
+        const response = await fetch(
+          `${ROOT_URL}/repos/${user}/${repo}/contributors`
         );
-        if (response.status === 404) {
-          throw Error('Not Found! Check user or repo settings.');
+
+        if (!response.ok) {
+          dispatch(setErrorCode(response.status));
+          if (response.status === 404) {
+            throw Error('Not Found! Check user or repo settings.');
+          }
+          throw Error('Error occurs!');
         }
-        throw Error('Error occurs!');
+
+        return response.json();
+      } catch (e) {
+        throw e;
       }
+    };
 
-      return response.json();
-    } catch (e) {
-      throw e;
-    }
-  };
-
-  dispatch(setLoading());
-
-  try {
-    const data = (await getData()) as Array<Reviewer>;
-    const mappedContributors: Array<Reviewer> = data.map((contributor) => ({
-      login: contributor.login.toLowerCase(),
-      html_url: contributor.html_url,
-    }));
-    dispatch(setLoaded());
-
-    const filteredContributors = contributors.filter(
-      (contributor) =>
-        !blacklist.list.some((item) => item === contributor.login)
-    );
-    const randomIndex = Math.floor(Math.random() * filteredContributors.length);
-    const reviewer = filteredContributors[randomIndex];
-    setReviewer(reviewer);
-  } catch (e) {
-    if (e instanceof Error) {
-      dispatch(
-        setError({
-          message: e.message,
+    try {
+      const data = (await getData()) as Array<Contributor>;
+      const mappedContributors: Array<Contributor> = data.map(
+        (contributor) => ({
+          login: contributor.login.toLowerCase(),
+          html_url: contributor.html_url,
         })
       );
-    }
-  }
+      dispatch(setLoading('loaded'));
 
-  dispatch(setLoading(false));
-};
+      const filteredContributors = mappedContributors.filter(
+        (contributor) =>
+          !blacklist.list.some((item) => item === contributor.login)
+      );
+      const randomIndex = Math.floor(
+        Math.random() * filteredContributors.length
+      );
+      const reviewer = filteredContributors[randomIndex];
+
+      if (reviewer) {
+        dispatch(setReviewerLogin(reviewer.login));
+        dispatch(setReviewerURL(reviewer.html_url));
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        dispatch(setErrorMessage(e.message));
+        dispatch(setLoading('error'));
+      }
+    }
+  };
 
 export {
   setUser,
@@ -279,11 +277,11 @@ export {
   addToBlacklist,
   removeFromBlacklist,
   setCurrentLogin,
-  setLoading,
-  setLoaded,
-  setError,
-  setFilling,
   setReviewerLogin,
   setReviewerURL,
+  setLoading,
+  setErrorMessage,
+  setErrorCode,
+  loadReviewer,
   reducer,
 };

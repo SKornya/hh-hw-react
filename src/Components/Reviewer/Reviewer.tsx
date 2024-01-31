@@ -1,117 +1,54 @@
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { Dispatch } from 'redux';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  setError,
-  setLoaded,
-  setLoading,
-  Action,
-  PayloadAction,
+  ErrorAction,
+  loadReviewer,
+  ReviewerAction,
+  SettingsAction,
 } from '../../model/model';
 import { RootState } from '../../store';
 
 import './Reviewer.less';
 
-interface Contributor {
-  login: string;
-  html_url: string;
-}
-
-const ROOT_URL = 'https://api.github.com';
-
 const Reviewer: FunctionComponent = () => {
-  const [reviewer, setReviewer] = useState<Contributor | null>(null);
+  const dispatch =
+    useDispatch<Dispatch<ReviewerAction | SettingsAction | ErrorAction>>();
 
-  const dispatch = useDispatch<Dispatch<Action | PayloadAction>>();
+  const reviewer = useSelector((state: RootState) => state.reviewer);
+  const { data, loading } = reviewer;
 
   const settings = useSelector((state: RootState) => state.settings);
-  const status = useSelector((state: RootState) => state.status);
-  const { user, repo, blacklist } = settings;
+  const { user, repo } = settings;
 
-  const getRandomReviewer = (contributors: Array<Contributor>) => {
-    const filteredContributors = contributors.filter(
-      (contributor) =>
-        !blacklist.list.some((item) => item === contributor.login)
-    );
-    const randomIndex = Math.floor(Math.random() * filteredContributors.length);
-    const reviewer = filteredContributors[randomIndex];
-    setReviewer(reviewer);
-  };
-
-  const searchContributor = async (): Promise<void> => {
-    const getData = async () => {
-      try {
-        const response = await fetch(
-          `${ROOT_URL}/repos/${user}/${repo}/contributors`
-        );
-
-        if (!response.ok) {
-          dispatch(
-            setError({
-              code: response.status,
-            })
-          );
-          if (response.status === 404) {
-            throw Error('Not Found! Check user or repo settings.');
-          }
-          throw Error('Error occurs!');
-        }
-
-        return response.json();
-      } catch (e) {
-        throw e;
-      }
-    };
-
-    dispatch(setLoading());
-
-    try {
-      const data = (await getData()) as Array<Contributor>;
-      const mappedContributors: Array<Contributor> = data.map(
-        (contributor) => ({
-          login: contributor.login.toLowerCase(),
-          html_url: contributor.html_url,
-        })
-      );
-      dispatch(setLoaded());
-
-      getRandomReviewer(mappedContributors);
-    } catch (e) {
-      if (e instanceof Error) {
-        dispatch(
-          setError({
-            message: e.message,
-          })
-        );
-      }
-    }
-  };
+  const error = useSelector((state: RootState) => state.error);
+  const { message, code } = error;
 
   return (
     <div className="content">
       <button
         className="button content__button"
-        disabled={!user || !repo}
-        onClick={searchContributor}
+        disabled={!user || !repo || loading === 'loading'}
+        onClick={() => dispatch(loadReviewer())}
       >
         {user && repo
           ? 'Search reviewer'
           : 'Fill user and repo fileds in settings'}
       </button>
 
-      {status.status === 'LOADING' && <div className="spinner"></div>}
+      {loading === 'loading' && <div className="spinner"></div>}
 
-      {status.status === 'LOADED' && (
+      {loading === 'loaded' && (
         <div className="content__contributor">
-          {reviewer ? (
+          {reviewer.data.login ? (
             <>
               Your reviewer
               <a
-                href={reviewer.html_url}
+                href={data.html_url}
                 className="content__contributor-link"
                 target="_blank"
               >
-                {reviewer.login}
+                {data.login}
               </a>
             </>
           ) : (
@@ -120,9 +57,9 @@ const Reviewer: FunctionComponent = () => {
         </div>
       )}
 
-      {status.status === 'ERROR' && (
+      {message && code && loading === 'error' && (
         <div className="content__error">
-          Oops! {status.error.message} Error status is {status.error.code}
+          Oops! {message} Error status is {code}
         </div>
       )}
     </div>

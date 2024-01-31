@@ -1,7 +1,7 @@
 import { FunctionComponent, useState } from 'react';
 import { Dispatch } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { Action, setRepo, PayloadAction, setUser } from '../../model/model';
+import { setRepo, setUser, SettingsAction } from '../../model/model';
 import { RootState } from '../../store';
 
 import Blacklist from '../Blacklist/Blacklist';
@@ -17,7 +17,7 @@ import blacklistIcon from '../../assets/blacklist_icon.svg';
 const Settings: FunctionComponent = () => {
   const [show, setShow] = useState<boolean>(false);
 
-  const dispatch = useDispatch<Dispatch<Action | PayloadAction>>();
+  const dispatch = useDispatch<Dispatch<SettingsAction>>();
 
   const user = useSelector((state: RootState) => state.settings.user);
   const repo = useSelector((state: RootState) => state.settings.repo);
