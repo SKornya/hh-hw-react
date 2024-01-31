@@ -29,6 +29,7 @@ const Reviewer: FunctionComponent = () => {
       <button
         className="button content__button"
         disabled={!user || !repo || loading === 'loading'}
+        // @ts-ignore
         onClick={() => dispatch(loadReviewer())}
       >
         {user && repo
