@@ -3,8 +3,11 @@ import { combineReducers, createStore } from 'redux';
 interface Settings {
   user: string;
   repo: string;
-  blacklist: Array<string>;
-  [key: string]: string | Array<string>;
+  blacklist: {
+    list: Array<string>;
+    currentLogin: string;
+  };
+  // [key: string]: string | { blacklist: Array<string>; currentLogin: string };
 }
 
 interface Status {
@@ -32,6 +35,7 @@ const SETUSER = 'SETUSER';
 const SETREPO = 'SETREPO';
 const ADDTOBLACKLIST = 'ADDTOBLACKLIST';
 const REMOVEFROMBLACKLIST = 'REMOVEFROMBLAKCLIST';
+const SETCURRENTLOGIN = 'SETCURRENTLOGIN';
 
 const LOADING = 'LOADING';
 const LOADED = 'LOADED';
@@ -41,7 +45,10 @@ const FILLING = 'FILLING';
 const initialSettings = {
   user: '',
   repo: '',
-  blacklist: [],
+  blacklist: {
+    list: [],
+    currentLogin: '',
+  },
 };
 
 const initialStatus = {
@@ -72,6 +79,11 @@ const removeFromBlacklist = (login: string): SettingsAction => ({
   payload: login,
 });
 
+const setCurrentLogin = (login: string): SettingsAction => ({
+  type: SETCURRENTLOGIN,
+  payload: login,
+});
+
 const setLoading = (): Action => ({
   type: LOADING,
 });
@@ -98,12 +110,31 @@ const settingsReducer = (
       return { ...state, user: action.payload };
     case SETREPO:
       return { ...state, repo: action.payload };
+    case SETCURRENTLOGIN:
+      return {
+        ...state,
+        blacklist: {
+          ...state.blacklist,
+          currentLogin: action.payload,
+        },
+      };
     case ADDTOBLACKLIST:
-      return { ...state, blacklist: [...state.blacklist, action.payload] };
+      return {
+        ...state,
+        blacklist: {
+          ...state.blacklist,
+          list: [...state.blacklist.list, action.payload],
+        },
+      };
     case REMOVEFROMBLACKLIST:
       return {
         ...state,
-        blacklist: state.blacklist.filter((login) => login !== action.payload),
+        blacklist: {
+          ...state.blacklist,
+          list: state.blacklist.list.filter(
+            (login) => login !== action.payload
+          ),
+        },
       };
     default:
       return state;
@@ -142,6 +173,7 @@ export {
   setRepo,
   addToBlacklist,
   removeFromBlacklist,
+  setCurrentLogin,
   setLoading,
   setLoaded,
   setError,

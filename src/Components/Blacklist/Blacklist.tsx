@@ -1,4 +1,4 @@
-import { FormEvent, FunctionComponent, useRef } from 'react';
+import { FormEvent, FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -7,9 +7,11 @@ import {
   RootState,
   Action,
   SettingsAction,
+  setCurrentLogin,
 } from '../../store';
 
 import './Blacklist.less';
+import Input from '../Input/Input';
 
 interface BlacklistProps {
   imgSrc: string;
@@ -18,10 +20,16 @@ interface BlacklistProps {
 const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
   const dispatch = useDispatch<Dispatch<Action | SettingsAction>>();
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const blacklist = useSelector(
+    (state: RootState) => state.settings.blacklist.list
+  );
+  const currentLogin = useSelector(
+    (state: RootState) => state.settings.blacklist.currentLogin
+  );
 
-  const blacklist = useSelector((state: RootState) => state.settings.blacklist);
+  const handleCurrentLoginChange = (value: string): void => {
+    dispatch(setCurrentLogin(value));
+  };
 
   const removeLogin = (login: string) => {
     dispatch(removeFromBlacklist(login));
@@ -29,29 +37,26 @@ const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
 
   const addLogin = (e: FormEvent) => {
     e.preventDefault();
-    const login = inputRef.current?.value;
-
-    if (login !== undefined && !blacklist.includes(login.toLowerCase())) {
-      dispatch(addToBlacklist(login.toLowerCase()));
+    const trimmedLogin = currentLogin.trim();
+    if (
+      trimmedLogin !== '' &&
+      !blacklist.includes(trimmedLogin.toLowerCase())
+    ) {
+      dispatch(addToBlacklist(trimmedLogin.toLowerCase()));
     }
-
-    formRef.current?.reset();
+    dispatch(setCurrentLogin(''));
   };
 
   return (
-    <div className="blacklist">
-      <form ref={formRef} className="blacklist__form" onSubmit={addLogin}>
-        <div className="blacklist__form-container">
-          <label htmlFor="blacklist__input" className="blacklist__label">
-            <img src={imgSrc} alt="blacklist-logo" className="blacklist-logo" />
-          </label>
-          <input
-            ref={inputRef}
-            placeholder="add login to blacklist"
-            id="blacklist__input"
-            className="blacklist__input"
-          />
-        </div>
+    <div className="blacklist-container">
+      <form className="blacklist-container__form" onSubmit={addLogin}>
+        <Input
+          imgSrc={imgSrc}
+          type="blacklist"
+          value={currentLogin}
+          placeholder="add login to blacklist"
+          onChange={handleCurrentLoginChange}
+        />
         <button className="blacklist__button"></button>
       </form>
 

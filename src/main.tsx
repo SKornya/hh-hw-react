@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 
 import App from './App';
@@ -7,13 +7,12 @@ import './index.less';
 
 import store from './store';
 
-const root = document.getElementById('root');
+const root = createRoot(document.getElementById('root') as HTMLDivElement);
 
-render(
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
-  root
+  </React.StrictMode>
 );
