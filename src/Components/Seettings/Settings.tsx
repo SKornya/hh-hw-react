@@ -1,7 +1,7 @@
 import { FunctionComponent, useState } from 'react';
 import { Dispatch } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRepo, setUser, SettingsAction } from '../../model/model';
+import { setRepo, setUser, SettingsAction } from '../../model/settings';
 import { RootState } from '../../store';
 
 import Blacklist from '../Blacklist/Blacklist';
@@ -22,14 +22,6 @@ const Settings: FunctionComponent = () => {
   const user = useSelector((state: RootState) => state.settings.user);
   const repo = useSelector((state: RootState) => state.settings.repo);
 
-  const handleUserChange = (value: string): void => {
-    dispatch(setUser(value));
-  };
-
-  const handleRepoChange = (value: string): void => {
-    dispatch(setRepo(value));
-  };
-
   return (
     <div className="settings">
       <div className="header">
@@ -42,14 +34,14 @@ const Settings: FunctionComponent = () => {
           <Input
             value={user}
             type="user"
-            onChange={handleUserChange}
+            onChange={(value) => dispatch(setUser(value))}
             imgSrc={userIcon}
             placeholder="fill the user field"
           />
           <Input
             value={repo}
             type="repo"
-            onChange={handleRepoChange}
+            onChange={(value) => dispatch(setRepo(value))}
             imgSrc={repoIcon}
             placeholder="field the repo field"
           />

@@ -1,7 +1,6 @@
 import { applyMiddleware, createStore } from 'redux';
 import { thunk } from 'redux-thunk';
-import { reducer } from './model/model';
-// import { asyncActionsMiddleware } from './model/middleware';
+import reducer from './model/reducer';
 
 const store = createStore(reducer, {}, applyMiddleware(thunk));
 

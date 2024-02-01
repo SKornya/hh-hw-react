@@ -26,7 +26,6 @@
             "endOfLine": "auto"
           }
         ],
-        "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/explicit-module-boundary-types": 0,
         "@typescript-eslint/no-non-null-assertion": 0,
         "import/extensions": 0,

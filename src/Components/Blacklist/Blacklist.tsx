@@ -6,7 +6,7 @@ import {
   addToBlacklist,
   setCurrentLogin,
   SettingsAction,
-} from '../../model/model';
+} from '../../model/settings';
 import { RootState } from '../../store';
 
 import './Blacklist.less';
