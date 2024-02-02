@@ -1,13 +1,11 @@
 import { FormEvent, FunctionComponent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Dispatch } from 'redux';
+import { useSelector } from 'react-redux';
 import {
   removeFromBlacklist,
   addToBlacklist,
   setCurrentLogin,
-  SettingsAction,
 } from '../../model/settings';
-import { RootState } from '../../store';
+import { RootState, useAppDispatch } from '../../store';
 
 import './Blacklist.less';
 import Input from '../Input/Input';
@@ -17,7 +15,7 @@ interface BlacklistProps {
 }
 
 const Blacklist: FunctionComponent<BlacklistProps> = ({ imgSrc }) => {
-  const dispatch = useDispatch<Dispatch<SettingsAction>>();
+  const dispatch = useAppDispatch();
 
   const blacklist = useSelector(
     (state: RootState) => state.settings.blacklist.list

@@ -1,11 +1,9 @@
-import { Dispatch } from 'redux';
-import { RootState } from '../store';
-import { SettingsAction } from './settings';
-import { ErrorAction, setErrorCode, setErrorMessage } from './error';
+import { AppDispatch, RootState } from '../store';
+import { setErrorCode, setErrorMessage } from './error';
 
 interface Contributor {
   login: string;
-  html_url: string;
+  htmlUrl: string;
 }
 
 interface Reviewer {
@@ -58,11 +56,7 @@ const reviewerReducer = (
 };
 
 const loadReviewer =
-  () =>
-  async (
-    dispatch: Dispatch<ReviewerAction | SettingsAction | ErrorAction>,
-    getState: () => RootState
-  ) => {
+  () => async (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch(setLoading(true));
     dispatch(setReviewer(null));
     dispatch(setErrorMessage(null));
@@ -98,11 +92,14 @@ const loadReviewer =
     };
 
     try {
-      const data = (await getData()) as Array<Contributor>;
+      const data = (await getData()) as Array<{
+        login: string;
+        html_url: string;
+      }>;
       const mappedContributors: Array<Contributor> = data.map(
         (contributor) => ({
           login: contributor.login.toLowerCase(),
-          html_url: contributor.html_url,
+          htmlUrl: contributor.html_url,
         })
       );
 

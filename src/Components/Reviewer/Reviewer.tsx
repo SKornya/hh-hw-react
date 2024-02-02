@@ -1,16 +1,12 @@
 import { FunctionComponent } from 'react';
-import { Dispatch } from 'redux';
-import { useSelector, useDispatch } from 'react-redux';
-import { loadReviewer, ReviewerAction } from '../../model/reviewer';
-import { ErrorAction } from '../../model/error';
-import { SettingsAction } from '../../model/settings';
-import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
+import { loadReviewer } from '../../model/reviewer';
+import { RootState, useAppDispatch } from '../../store';
 
 import './Reviewer.less';
 
 const Reviewer: FunctionComponent = () => {
-  const dispatch =
-    useDispatch<Dispatch<ReviewerAction | SettingsAction | ErrorAction>>();
+  const dispatch = useAppDispatch();
 
   const reviewer = useSelector((state: RootState) => state.reviewer);
   const { data, loading } = reviewer;
@@ -26,8 +22,6 @@ const Reviewer: FunctionComponent = () => {
       <button
         className="button content__button"
         disabled={!user || !repo || loading}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         onClick={() => dispatch(loadReviewer())}
       >
         {user && repo
@@ -42,7 +36,7 @@ const Reviewer: FunctionComponent = () => {
           <>
             Your reviewer
             <a
-              href={data.html_url}
+              href={data.htmlUrl}
               className="content__contributor-link"
               target="_blank"
             >
