@@ -1,59 +1,39 @@
-import { FunctionComponent, useContext, useRef, useState } from 'react';
-
-import { StorageContext, Settings } from '../../Context/StorageContext';
+import React, { FunctionComponent } from 'react';
 
 import './Input.less';
 
 interface InputProps {
-  inputType: string;
+  value: string;
   imgSrc: string;
+  type: string;
+  placeholder: string;
+  onChange: (value: string) => void;
 }
 
-const Input: FunctionComponent<InputProps> = ({ inputType, imgSrc }) => {
-  const context = useContext(StorageContext);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const [inputValue, setInputValue] = useState(() => {
-    if (context) {
-      return `${context.settings[inputType] as string}`;
-    }
-    return '';
-  });
-
-  if (!context) {
-    return null;
-  }
-
-  const { settings, setSettings, setDataToLocalStorage } = context;
-
-  const setUserSetting = () => {
-    const value = inputRef.current?.value;
-
-    if (value !== undefined) {
-      setInputValue(value);
-
-      const newSettings: Settings = {
-        ...settings,
-        [inputType]: value,
-      };
-
-      setDataToLocalStorage(newSettings);
-      setSettings(newSettings);
-    }
+const Input: FunctionComponent<InputProps> = ({
+  value,
+  imgSrc,
+  type,
+  placeholder,
+  onChange,
+}) => {
+  const onChangeHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    onChange(event.target.value);
   };
 
   return (
-    <div className={inputType}>
-      <label htmlFor={inputType} className={`${inputType}__label`}>
-        <img src={imgSrc} alt={inputType} className="input-logo" />
+    <div className={type}>
+      <label htmlFor={type} className={`${type}__label`}>
+        <img src={imgSrc} alt={type} className="input-logo" />
       </label>
       <input
-        id={inputType}
-        ref={inputRef}
-        placeholder={inputType}
-        onChange={setUserSetting}
-        className={`${inputType}__input`}
-        value={inputValue}
+        id={type}
+        placeholder={placeholder}
+        onChange={onChangeHandler}
+        className={`${type}__input`}
+        value={value}
       />
     </div>
   );

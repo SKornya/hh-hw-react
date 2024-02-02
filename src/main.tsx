@@ -1,15 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
 
 import App from './App';
 import './index.less';
 
-import StorageProvider from './Context/StorageContext';
+import store from './store';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const root = createRoot(document.getElementById('root') as HTMLDivElement);
+
+root.render(
   <React.StrictMode>
-    <StorageProvider>
+    <Provider store={store}>
       <App />
-    </StorageProvider>
+    </Provider>
   </React.StrictMode>
 );
